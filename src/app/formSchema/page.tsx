@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { BaseSyntheticEvent, ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface User {
@@ -23,7 +23,7 @@ export default function ReactHookFormExample() {
 
   const onSubmit = (
     data: User,
-    event?: React.ChangeEvent<HTMLInputElement>
+    event?: BaseSyntheticEvent<object, HTMLElement, HTMLElement>
   ) => {
     if (event) event.preventDefault();
     console.log(userform)
