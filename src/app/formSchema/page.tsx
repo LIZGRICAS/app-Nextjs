@@ -21,14 +21,12 @@ export default function ReactHookFormExample() {
 
   const [valid, setValid] = useState<boolean>(false);
 
-  let index: number = 0;
-
   const onSubmit = (
     data: User,
     event?: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event) event.preventDefault();
-    data.id = index++;
+    console.log(userform)
     setUserform([...userform, data]);
   };
 
@@ -142,15 +140,17 @@ export default function ReactHookFormExample() {
           <table className="table-fixed pt-8 mt-10 border">
             <thead className="w-screen pt-8 foundation_card__v7VKB border text-gray-700">
               <tr>
-                <th style={{ width: "20%" }}>Full Name</th>
+                <th style={{ width: "5%" }}>Id</th>
+                <th style={{ width: "20%" }}>Name</th>
                 <th style={{ width: "20%" }}>User</th>
                 <th style={{ width: "20%" }}>Email</th>
                 <th style={{ width: "20%" }}>State</th>
               </tr>
             </thead>
-            <tbody className="foundation_card__v7VKB2">
+            <tbody className="foundation_card__v7VKB2 text-center">
               {userform.map((data, index) => (
                 <tr key={index}>
+                  <td className="border">{index}</td>
                   <td className="border">{data.name}</td>
                   <td className="border">{data.user}</td>
                   <td className="border">{data.email}</td>
