@@ -10,7 +10,7 @@ export interface Image {
   };
 }
 interface SearchBarProps {
-  setImages: Dispatch<Image[]>;
+  setImages: Dispatch<Image[] | null>;
 }
 
 export default function SearchBar({ setImages }: SearchBarProps) {

@@ -6,7 +6,7 @@ import { Image } from '../types/image'
 
 
 export default function imgSearch() {
-  const [images, setImages] = useState<Image[] | null>(null)
+  const [images, setImages] = useState<Image[] | null | any>(null)
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-between p-24 ">
