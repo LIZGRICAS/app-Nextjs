@@ -9,6 +9,7 @@ export interface Image {
     portrait: string;
   };
 }
+
 interface SearchBarProps {
   setImages: Dispatch<Image[] | null>;
 }
