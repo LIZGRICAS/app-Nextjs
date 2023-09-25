@@ -13,6 +13,10 @@ export default function Home() {
     label: 'FormSchema',
     route: '/formSchema'
   },
+  {
+    label: 'imgSearch',
+    route: '/imgSearch'
+  },
   ]
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24" >
@@ -67,7 +71,7 @@ export default function Home() {
           </p>
 
         </Link>
-        <Link rel="stylesheet" href=""
+        <Link rel="stylesheet" href="/imgSearch"
         className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
           target="_blank">
         

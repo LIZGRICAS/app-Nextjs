@@ -19,7 +19,6 @@ export default function ReactHookFormExample() {
 
   const [userform, setUserform] = useState<User[]>([]);
 
-  const [valid, setValid] = useState<boolean>(false);
 
   const onSubmit = (
     data: User,
