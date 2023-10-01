@@ -1,5 +1,5 @@
 "use client";
-import { BaseSyntheticEvent, ChangeEvent, useState } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface User {
@@ -12,20 +12,19 @@ interface User {
 export default function ReactHookFormExample() {
   const {
     register,
+    trigger,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<User>();
 
   const [userform, setUserform] = useState<User[]>([]);
-
 
   const onSubmit = (
     data: User,
     event?: BaseSyntheticEvent<object, HTMLElement, HTMLElement>
   ) => {
     if (event) event.preventDefault();
-    console.log(userform)
+    console.log(userform);
     setUserform([...userform, data]);
   };
 
@@ -50,11 +49,14 @@ export default function ReactHookFormExample() {
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                   id="grid-first-name"
                   type="text"
-                  placeholder="Jane"
-                  {...register("name")}
+                  placeholder="Jane Willis"
+                  {...register("name", {
+                    required: true,
+                    onBlur: (e) => trigger("name"),
+                  })}
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-xs italic">
+                  <p className="text-gray-600 text-xs italic">
                     Please fill out this field.
                   </p>
                 )}
@@ -70,11 +72,14 @@ export default function ReactHookFormExample() {
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                   id="grid-first-name"
                   type="text"
-                  placeholder="Jane"
-                  {...register("user")}
+                  placeholder="Jane015"
+                  {...register("user", {
+                    required: true,
+                    onBlur: (e) => trigger("user"),
+                  })}
                 />
                 {errors.user && (
-                  <p className="text-red-500 text-xs italic">
+                  <p className="text-gray-600 text-xs italic">
                     Please fill out this field.
                   </p>
                 )}
@@ -91,8 +96,24 @@ export default function ReactHookFormExample() {
                   id="grid-last-name"
                   type="email"
                   placeholder="correo@gmail.com"
-                  {...register("email")}
+                  {...register("email", {
+                    required: true,
+                    onBlur: (e) => trigger("email"),
+                    validate: {
+                      maxLength: (v) =>
+                        v.length <= 50 ||
+                        "The email should have at most 50 characters",
+                      matchPattern: (v) =>
+                        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+                        "Email address must be a valid address",
+                    },
+                  })}
                 />
+                {errors.email?.message && (
+                  <p className="text-gray-600 text-xs italic">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex flex-wrap -mx-3 mb-6">
@@ -108,10 +129,25 @@ export default function ReactHookFormExample() {
                   id="grid-password"
                   type="password"
                   placeholder="******************"
+                  {...register("password", {
+                    required: true,
+                    onBlur: (e) => trigger("password"),
+                    validate: {
+                      minLength: (v) => v.length >= 6,
+                      matchPattern: (v) => /^[a-zA-Z0-9_]+$/.test(v),
+                    },
+                  })}
                 />
-                <p className="text-gray-600 text-xs italic">
-                  Make it as long and as crazy as you'd like
-                </p>
+                {errors.password?.type === "minLength" && (
+                  <p className="text-gray-600 text-xs italic">
+                    The password should have at least 6 characters
+                  </p>
+                )}
+                {errors.password?.type === "matchPattern" && (
+                  <p className="text-gray-600 text-xs italic">
+                    The password must contain only letters, numbers and _
+                  </p>
+                )}
               </div>
             </div>
             <div className="md:flex md:items-center mb-6">
