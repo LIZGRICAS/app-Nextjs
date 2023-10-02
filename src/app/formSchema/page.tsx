@@ -1,8 +1,11 @@
 "use client";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+import uuid from "react-uuid";
+import Swal from "sweetalert2";
 
 interface User {
+  id:string;
   name: string;
   user: string;
   email: string;
@@ -17,9 +20,10 @@ export default function ReactHookFormExample() {
     formState: { errors },
   } = useForm<User>();
 
+
   const [userform, setUserform] = useState<User[]>([]);
 
-  const onSubmit = (
+   const onSubmit = (
     data: User,
     event?: BaseSyntheticEvent<object, HTMLElement, HTMLElement>
   ) => {
@@ -27,6 +31,36 @@ export default function ReactHookFormExample() {
     console.log(userform);
     setUserform([...userform, data]);
   };
+
+  const deleteUser = (e: FormEvent, id:string) =>{
+    e.preventDefault();
+    Swal.fire({
+      title: "Estas seguro?",
+      text: `Estás seguro de eliminar el producto? Esta acción es irreversible!`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminarlo!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updateAddUser = userform.filter(
+          (user) => user.id !== id
+        );
+        setUserform(updateAddUser)
+          Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "El producto ha sido eliminado",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    })
+    
+  }
+
+  
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -171,7 +205,7 @@ export default function ReactHookFormExample() {
           </form>
         </div>
         <div className="h-screen pt-8 w-100">
-          <h1 className="glitch pt-8">CRUD REGISTER</h1>
+          <h1 className="glitch pt-8">USER LIST</h1>
           <table className="table-fixed pt-8 mt-10 border">
             <thead className="w-screen pt-8 foundation_card__v7VKB border text-gray-700">
               <tr>
@@ -184,8 +218,8 @@ export default function ReactHookFormExample() {
             </thead>
             <tbody className="foundation_card__v7VKB2 text-center">
               {userform.map((data, index) => (
-                <tr key={index}>
-                  <td className="border">{index}</td>
+                <tr key={uuid()}>
+                  <td className="border" >{data.id = uuid()}</td>
                   <td className="border">{data.name}</td>
                   <td className="border">{data.user}</td>
                   <td className="border">{data.email}</td>
@@ -207,7 +241,7 @@ export default function ReactHookFormExample() {
                       </svg>
                     </button>
                     &nbsp;&nbsp;
-                    <button className="btn btn-sm btn-danger">
+                    <button className="btn btn-sm btn-danger" onClick={(e) => deleteUser(e, data.id)}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
