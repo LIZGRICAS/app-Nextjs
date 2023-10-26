@@ -1,49 +1,20 @@
 "use client";
 import { FormEvent, useContext } from 'react';
 import Swal from "sweetalert2";
-import uuid from "react-uuid";
+
 import FormContext from '@/app/providers/FormContext';
 
 export const UserList = () => {
 
 const {setUserform, userform} = useContext(FormContext)
 
-  const deleteUser = (e: FormEvent, id:string) => {
-    e.preventDefault();
-    Swal.fire({
-      title: "Estas seguro?",
-      text: `Estás seguro de eliminar el producto? Esta acción es irreversible!`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, eliminarlo!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updateAddUser = userform.filter(
-          (user) => user.id !== id
-        );
-        setUserform(updateAddUser)
-          Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "El producto ha sido eliminado",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-    })
-    
-  }
+///-------------------User Edit-----------------------------------
 
   const editUser = (e:FormEvent, id:string) =>{
     e.preventDefault();
-    console.log(userform)
-
+    
     const userEdit = userform.filter(
       (user) => user.id === id)
-
-      console.log(userEdit[0].email, userEdit)
 
       Swal.fire({
         title: "Edit User",
@@ -61,7 +32,7 @@ const {setUserform, userform} = useContext(FormContext)
             <div class="main__field">
               <textarea
               class="main__input"
-              type="text"
+              type="email"
               required
               data-email
               >${userEdit[0].email}</textarea>
@@ -74,36 +45,46 @@ const {setUserform, userform} = useContext(FormContext)
               data-user
               >${userEdit[0].user}</textarea>
             </div>
+            <div class="main__field">
+              <textarea
+              class="main__input"
+              type="password"
+              required
+              data-password
+              >${userEdit[0].password}</textarea>
+            </div>
         </form>`,
         confirmButtonText: "Edit",
         preConfirm: () => {
           const name:string = Swal.getPopup().querySelector("[data-name]").value;
-          const email:string = Swal.getPopup().querySelector("[data-email]").value;
           const user:string = Swal.getPopup().querySelector("[data-user]").value;
-          if (!name || !email || !user || !id) {
+          const email:string = Swal.getPopup().querySelector("[data-email]").value;
+          const password:string = Swal.getPopup().querySelector("[data-password]").value;
+          if ( !id ||!name || !user || !email || !password) {
             Swal.showValidationMessage(`Por favor rellene todos los campos`);
           }
           return {
             id:id,
             name: name,
+            user: user,            
             email: email,
-            user: user
+            password:password
             };
               
           },
         }).then((result) => {
            const data = result.value
-          console.log(userform, result.value)
-          const userUpdate = userform.map(
-            (user) => user.id == id
-          );
-          setUserform([...userform,{
-            id:data.id,
-            name: data.name,
-            email: data.email,
-            user: data.user,
-            password: data.password
-            }])
+
+           const userIndex = userform.findIndex(
+            (user) => user.id === id)
+
+          userform[userIndex] = data
+
+          console.log(userform)
+
+          setUserform(userform)
+          
+          console.log(userIndex, data )
 
           Swal.fire ({
             title: "¡Actualización exitosa!",
@@ -112,6 +93,38 @@ const {setUserform, userform} = useContext(FormContext)
             timer: 1500,  
           });
         }) 
+
+///-------------------User Delete-----------------------------------
+
+
+const deleteUser = (e: FormEvent, id:string) => {
+  e.preventDefault();
+  Swal.fire({
+    title: "Estas seguro?",
+    text: `Estás seguro de eliminar el producto? Esta acción es irreversible!`,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, eliminarlo!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const updateAddUser = userform.filter(
+        (user) => user.id !== id
+      );
+      setUserform(updateAddUser)
+        Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "El producto ha sido eliminado",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  })
+  
+}
+
      
   }
 
@@ -130,8 +143,8 @@ const {setUserform, userform} = useContext(FormContext)
             </thead>
             <tbody className="foundation_card__v7VKB2 text-center">
               {userform.map((data) => (
-                <tr key={uuid()}>
-                  <td className="border" >{data.id = uuid()}</td>
+                <tr key={data.id}>
+                  <td className="border">{data.id}</td>
                   <td className="border">{data.name}</td>
                   <td className="border">{data.user}</td>
                   <td className="border">{data.email}</td>

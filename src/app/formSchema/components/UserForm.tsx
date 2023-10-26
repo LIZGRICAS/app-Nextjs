@@ -1,8 +1,9 @@
 
 import FormContext from "@/app/providers/FormContext";
 import { User } from "@/app/types/User";
-import { BaseSyntheticEvent, useContext } from "react";
+import { BaseSyntheticEvent, useContext, useEffect, useRef } from "react";
 import {useForm } from "react-hook-form";
+import uuid from "react-uuid";
 
 export const UserForm = () => {
   const {
@@ -20,10 +21,12 @@ export const UserForm = () => {
     event?: BaseSyntheticEvent<object, HTMLElement, HTMLElement>
   ) => {
     if (event) event.preventDefault();
-    console.log(userform);
+    data.id = uuid()
+    console.log(data.id);
     setUserform([...userform, data]);
   };
 
+ 
   //uuid en ref para que no cambie el valor del id
   return (
     <div>
@@ -50,7 +53,7 @@ export const UserForm = () => {
                   })}
                 />
                 {errors.name && (
-                  <p className="text-gray-600 text-xs italic">
+                  <p className="text-gray-600 text-xs italic border-red">
                     Please fill out this field.
                   </p>
                 )}
@@ -63,7 +66,7 @@ export const UserForm = () => {
                   User name
                 </label>
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border -500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                   id="grid-first-name"
                   type="text"
                   placeholder="Jane015"
@@ -73,7 +76,7 @@ export const UserForm = () => {
                   })}
                 />
                 {errors.user && (
-                  <p className="text-gray-600 text-xs italic">
+                  <p className="text-gray-600 text-xs italic border-red">
                     Please fill out this field.
                   </p>
                 )}
@@ -104,7 +107,7 @@ export const UserForm = () => {
                   })}
                 />
                 {errors.email?.message && (
-                  <p className="text-gray-600 text-xs italic">
+                  <p className="text-gray-600 text-xs italic ">
                     {errors.email.message}
                   </p>
                 )}
